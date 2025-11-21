@@ -17,3 +17,16 @@ export const connectRabbitMQ = async () => {
     console.error('RabbitMQ connection error:', error);
   }
 };
+
+export const publishToQueue = async (queue: string, message: any) => {
+  if (!channel) {
+    throw new Error('RabbitMQ channel is not initialized');
+  }
+
+  await channel.assertQueue(queue, { durable: true });
+  const payload = JSON.stringify(message);
+
+  channel.sendToQueue(queue, Buffer.from(payload), {
+    persistent: true
+  });
+};
