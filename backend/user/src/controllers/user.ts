@@ -5,7 +5,7 @@ import { redisClient } from "../index.js";
 import { User } from "../models/User.js";
 
 export const loginUser = tryCatch(async (req, res) => {
-  const {email} = req.body;
+  const { email } = req.body;
   const rateLimitKey = `otp:ratelimit;${email}`;
   const ratelimit = await redisClient.get(rateLimitKey);
   if (ratelimit) {
@@ -26,13 +26,13 @@ export const loginUser = tryCatch(async (req, res) => {
 
   await publishToQueue('send_otp_queue', message);
 
-  res.status(200).json({ 
-    message: "OTP sent to email." 
+  res.status(200).json({
+    message: "OTP sent to email."
   });
 });
 
 export const verifyUser = tryCatch(async (req, res) => {
-  
+
   const { email, otp } = req.body;
 
   if (!email || !otp) {
@@ -44,18 +44,19 @@ export const verifyUser = tryCatch(async (req, res) => {
   if (!storedOtp || storedOtp !== otp) {
     return res.status(400).json({ message: "Invalid or expired OTP." });
   }
-  await redisClient.del(otpKey); 
+  await redisClient.del(otpKey);
 
   let user = await User.findOne({ email });
   if (!user) {
-    const name = email.slice(0, 8);
-    user = await User.create({ name, email });
+    const username = email.slice(0, 8);
+    user = await User.create({ username, email });
     await user.save();
   }
 
   const tokenPayload = generateToken(user);
-  return res.status(200).json({ message: "OTP verified successfully.",
+  return res.status(200).json({
+    message: "OTP verified successfully.",
     user,
     token: tokenPayload
-   });
+  });
 });
