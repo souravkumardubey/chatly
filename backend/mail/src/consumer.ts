@@ -15,15 +15,15 @@ export const sendOtpConsumer = async () => {
     });
     const channel = await connection.createChannel();
     const queue = 'send_otp_queue';
-    await channel.assertQueue(queue, { 
-      durable: true 
+    await channel.assertQueue(queue, {
+      durable: true
     });
 
     console.log(`Waiting for messages in ${queue}.`);
     channel.consume(queue, async (msg) => {
       if (msg) {
         try {
-          const {to, subject, body} = JSON.parse(msg.content.toString());
+          const { to, subject, body } = JSON.parse(msg.content.toString());
           const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 465,
