@@ -66,3 +66,18 @@ export const userProfile = tryCatch(async (req: AuthRequest, res) => {
   const user = req.user;
   return res.status(200).json(user);
 });
+
+export const updateName = tryCatch(async (req: AuthRequest, res) => {
+  const user = await User.findById(req.user?._id);
+  if (!user) {
+    return res.status(404).json({ message: "User not found. Pleage Login" });
+  }
+  user.username = req.body.username;
+  await user.save();
+  const token = generateToken(user);
+  return res.status(200).json({
+    message: "Username updated successfully.",
+    user,
+    token
+  });
+});
