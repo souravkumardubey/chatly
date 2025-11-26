@@ -81,3 +81,16 @@ export const updateName = tryCatch(async (req: AuthRequest, res) => {
     token
   });
 });
+
+export const getAllUsers = tryCatch(async (req: AuthRequest, res) => {
+  const users = await User.find();
+  return res.status(200).json(users);
+});
+
+export const getUser = tryCatch(async (req: AuthRequest, res) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return res.status(404).json({ message: "User not found." });
+  }
+  return res.status(200).json(user);
+});
