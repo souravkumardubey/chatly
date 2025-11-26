@@ -9,6 +9,6 @@ userRoutes.post("/verify", verifyUser);
 userRoutes.get("/profile", isAuth, userProfile);
 userRoutes.put("/updateName", isAuth, updateName);
 userRoutes.get("/users/all", isAuth, getAllUsers);
-userRoutes.get("/users/:id", isAuth, getUser);
+userRoutes.get("/users/:id", getUser);
 
 export default userRoutes;
