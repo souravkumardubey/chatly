@@ -22,8 +22,9 @@ export const isAuth = async (req: AuthRequest, res: Response, next: NextFunction
         }
         req.user = decodedToken.user;
         next();
-    } catch (error) {
-        res.status(401).json({ message: "Please login - Jwt Error" });
+    } catch (error: any) {
+        console.error("JWT Verification Error:", error);
+        res.status(401).json({ message: "Please login - Jwt Error", error: error.message });
         return;
     }
 }

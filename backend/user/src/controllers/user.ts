@@ -72,7 +72,11 @@ export const updateName = tryCatch(async (req: AuthRequest, res) => {
   if (!user) {
     return res.status(404).json({ message: "User not found. Pleage Login" });
   }
-  user.username = req.body.username;
+  const { username } = req.body;
+  if (!username) {
+    return res.status(400).json({ message: "Username is required." });
+  }
+  user.username = username;
   await user.save();
   const token = generateToken(user);
   return res.status(200).json({
