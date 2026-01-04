@@ -12,7 +12,10 @@ export interface Chat extends Document {
 
 const chatSchema: Schema<Chat> = new Schema({
     users: { type: [String], required: true },
-    latest: { type: String, required: true },
+    latest: {
+        text: { type: String },
+        sender: { type: String },
+    },
 }, {
     timestamps: true,
 });
