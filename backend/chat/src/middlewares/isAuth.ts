@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
-interface IUser extends Document {
+interface IUser {
     _id: string,
-    name: string,
+    username: string,
     email: string,
 }
 
